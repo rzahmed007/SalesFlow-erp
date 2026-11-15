@@ -8,7 +8,44 @@ import {
 } from "../types";
 
 const STORAGE_SESSION_KEY = "jd_webnship_auth_session";
-const STORAGE_USERS_KEY = "jd_webnship_mock_users";
+
+// Fallback in-memory store for SSR or non-browser environments
+let memoryStore: Record<string, string> = {};
+
+const getStorageItem = (key: string): string | null => {
+  if (typeof window !== "undefined" && window.localStorage) {
+    try {
+      return window.localStorage.getItem(key);
+    } catch {
+      return memoryStore[key] || null;
+    }
+  }
+  return memoryStore[key] || null;
+};
+
+const setStorageItem = (key: string, value: string): void => {
+  if (typeof window !== "undefined" && window.localStorage) {
+    try {
+      window.localStorage.setItem(key, value);
+    } catch {
+      memoryStore[key] = value;
+    }
+  } else {
+    memoryStore[key] = value;
+  }
+};
+
+const removeStorageItem = (key: string): void => {
+  if (typeof window !== "undefined" && window.localStorage) {
+    try {
+      window.localStorage.removeItem(key);
+    } catch {
+      delete memoryStore[key];
+    }
+  } else {
+    delete memoryStore[key];
+  }
+};
 
 // Initial mock administrator user
 const DEFAULT_DEMO_USER: User = {
@@ -32,13 +69,13 @@ export interface IAuthService {
 }
 
 class MockAuthService implements IAuthService {
-  private delay(ms = 600): Promise<void> {
+  private delay(ms = 300): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   getCurrentSession(): AuthSession | null {
     try {
-      const raw = localStorage.getItem(STORAGE_SESSION_KEY);
+      const raw = getStorageItem(STORAGE_SESSION_KEY);
       if (!raw) return null;
       const session: AuthSession = JSON.parse(raw);
       // Validate expiration
@@ -53,7 +90,7 @@ class MockAuthService implements IAuthService {
   }
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    await this.delay(700);
+    await this.delay(300);
 
     const email = credentials.email.trim().toLowerCase();
     const password = credentials.password;
@@ -86,7 +123,7 @@ class MockAuthService implements IAuthService {
         expiresAt,
       };
 
-      localStorage.setItem(STORAGE_SESSION_KEY, JSON.stringify(session));
+      setStorageItem(STORAGE_SESSION_KEY, JSON.stringify(session));
 
       return {
         success: true,
@@ -104,12 +141,12 @@ class MockAuthService implements IAuthService {
   }
 
   async logout(): Promise<void> {
-    await this.delay(200);
-    localStorage.removeItem(STORAGE_SESSION_KEY);
+    await this.delay(100);
+    removeStorageItem(STORAGE_SESSION_KEY);
   }
 
   async forgotPassword(payload: ForgotPasswordPayload): Promise<AuthResponse> {
-    await this.delay(800);
+    await this.delay(300);
     const email = payload.email.trim().toLowerCase();
 
     if (!email || !email.includes("@")) {
@@ -134,7 +171,7 @@ class MockAuthService implements IAuthService {
   }
 
   async resetPassword(payload: ResetPasswordPayload): Promise<AuthResponse> {
-    await this.delay(800);
+    await this.delay(300);
 
     if (payload.password.length < 8) {
       return {
