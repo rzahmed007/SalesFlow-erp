@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%; /* #111111 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+
+    --primary: 0 0% 7%; /* #111111 */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+
+    --secondary: 210 20% 98%; /* #F8F9FA */
+    --secondary-foreground: 0 0% 7%;
+
+    --muted: 210 20% 97%;
+    --muted-foreground: 220 9% 46%; /* #6B7280 */
+
+    --accent: 0 0% 96%; /* #F5F5F5 */
+    --accent-foreground: 0 0% 7%;
+
+    --destructive: 0 72% 51%; /* #DC2626 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%; /* #E5E7EB */
+    --input: 220 13% 91%;
+    --ring: 0 0% 7%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 7%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 7%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222 25% 6%; /* #090B0E */
+    --foreground: 0 0% 98%;
+
+    --card: 222 20% 10%; /* #11141A */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 222 20% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 7%;
+
+    --secondary: 222 15% 15%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 222 15% 14%;
+    --muted-foreground: 215 15% 65%;
+
+    --accent: 222 15% 16%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 222 15% 18%;
+    --input: 222 15% 18%;
+    --ring: 0 0% 98%;
+
+    --sidebar-background: 222 24% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-border: 222 15% 16%;
+    --sidebar-accent: 222 15% 15%;
+    --sidebar-accent-foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.45);
+}
